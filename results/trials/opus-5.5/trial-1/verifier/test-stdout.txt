@@ -1,0 +1,80 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 4 items
+
+test_outputs.py ..FF                                                     [100%]
+
+=================================== FAILURES ===================================
+_____________________________ test_period[winter] ______________________________
+
+period = 'winter'
+
+    @pytest.mark.parametrize("period", PERIODS)
+    def test_period(period):
+        """The forecast must pass the period's daily-feature rule (see housegrade.py)."""
+        assert os.path.isfile(PREDICTOR), "missing /app/predict.py"
+        out = run_predictor(period)
+        truth = housegrade.read_truth(os.path.join(HIDDEN, f"truth_{period}.csv"))
+        try:
+            pred = housegrade.read_prediction(out, truth.index, period)
+        except Exception as exc:  # unreadable or incomplete output fails the period
+            pytest.fail(f"{period}: output is not usable ({exc})")
+        r = housegrade.grade(truth, pred, period)
+        summary = {k: r[k] for k in ("passed", "share", "min_week", "bad_days", "max_day_miss", "graded_days",
+                                     "week_share", "week_kwh_err", "week_peak_err", "feat_share")}
+        print(f"{period}: {json.dumps(summary)}")
+        print(f"{period}: days with a feature out of tolerance: {json.dumps(r['failed_days'])}")
+>       assert r["passed"], (
+            f"{period}: share of day-features in tolerance {r['share']:.3f} (needs {housegrade.BAR_ALL:.2f}), "
+            f"lowest week {r['min_week']:.3f} (needs {housegrade.BAR_WEEK:.2f}), days with more than "
+            f"{housegrade.DAY_MAX_MISS} misses {r['bad_days']} (needs 0), weekly energy error {r['week_kwh_err']} "
+            f"(within {housegrade.WEEK_KWH_TOL:.2f}), weekly peak error {r['week_peak_err']} (within {housegrade.WEEK_PEAK_TOL:.2f})"
+        )
+E       AssertionError: winter: share of day-features in tolerance 0.912 (needs 0.92), lowest week 0.904 (needs 0.80), days with more than 2 misses 0 (needs 0), weekly energy error [-0.019, -0.001, -0.021] (within 0.12), weekly peak error [-0.175, 0.039, -0.13] (within 0.30)
+E       assert False
+
+test_outputs.py:187: AssertionError
+----------------------------- Captured stdout call -----------------------------
+winter: {"passed": false, "share": 0.9120370370370371, "min_week": 0.9038461538461539, "bad_days": 0, "max_day_miss": 2, "graded_days": 27, "week_share": [0.911, 0.929, 0.904], "week_kwh_err": [-0.019, -0.001, -0.021], "week_peak_err": [-0.175, 0.039, -0.13], "feat_share": {"kwh": 0.963, "peak15": 0.593, "hi_h": 1.0, "t_morn": 0.963, "tmin": 0.852, "t_night": 1.0, "t_occ": 0.926, "t_day": 1.0}}
+winter: days with a feature out of tolerance: {"2021-01-26": ["peak15"], "2021-01-27": ["peak15"], "2021-01-28": ["peak15"], "2021-01-30": ["t_morn", "t_occ"], "2021-02-01": ["peak15"], "2021-02-02": ["peak15"], "2021-02-03": ["peak15"], "2021-02-05": ["peak15"], "2021-02-09": ["tmin"], "2021-02-10": ["peak15", "tmin"], "2021-02-11": ["peak15", "tmin"], "2021-02-20": ["peak15", "tmin"], "2021-02-23": ["t_occ"], "2021-02-27": ["peak15"], "2021-02-28": ["kwh"]}
+_____________________________ test_period[spring] ______________________________
+
+period = 'spring'
+
+    @pytest.mark.parametrize("period", PERIODS)
+    def test_period(period):
+        """The forecast must pass the period's daily-feature rule (see housegrade.py)."""
+        assert os.path.isfile(PREDICTOR), "missing /app/predict.py"
+        out = run_predictor(period)
+        truth = housegrade.read_truth(os.path.join(HIDDEN, f"truth_{period}.csv"))
+        try:
+            pred = housegrade.read_prediction(out, truth.index, period)
+        except Exception as exc:  # unreadable or incomplete output fails the period
+            pytest.fail(f"{period}: output is not usable ({exc})")
+        r = housegrade.grade(truth, pred, period)
+        summary = {k: r[k] for k in ("passed", "share", "min_week", "bad_days", "max_day_miss", "graded_days",
+                                     "week_share", "week_kwh_err", "week_peak_err", "feat_share")}
+        print(f"{period}: {json.dumps(summary)}")
+        print(f"{period}: days with a feature out of tolerance: {json.dumps(r['failed_days'])}")
+>       assert r["passed"], (
+            f"{period}: share of day-features in tolerance {r['share']:.3f} (needs {housegrade.BAR_ALL:.2f}), "
+            f"lowest week {r['min_week']:.3f} (needs {housegrade.BAR_WEEK:.2f}), days with more than "
+            f"{housegrade.DAY_MAX_MISS} misses {r['bad_days']} (needs 0), weekly energy error {r['week_kwh_err']} "
+            f"(within {housegrade.WEEK_KWH_TOL:.2f}), weekly peak error {r['week_peak_err']} (within {housegrade.WEEK_PEAK_TOL:.2f})"
+        )
+E       AssertionError: spring: share of day-features in tolerance 0.652 (needs 0.92), lowest week 0.464 (needs 0.80), days with more than 2 misses 14 (needs 0), weekly energy error [0.144, -0.042, 0.13, 0.13] (within 0.12), weekly peak error [0.194, -0.241, 0.084, 0.362] (within 0.30)
+E       assert False
+
+test_outputs.py:187: AssertionError
+----------------------------- Captured stdout call -----------------------------
+spring: {"passed": false, "share": 0.6517857142857143, "min_week": 0.4642857142857143, "bad_days": 14, "max_day_miss": 6, "graded_days": 28, "week_share": [0.464, 0.5, 0.839, 0.804], "week_kwh_err": [0.144, -0.042, 0.13, 0.13], "week_peak_err": [0.194, -0.241, 0.084, 0.362], "feat_share": {"kwh": 0.679, "peak15": 0.893, "hi_h": 1.0, "t_morn": 0.714, "tmin": 0.607, "t_night": 0.464, "t_occ": 0.321, "t_day": 0.536}}
+spring: days with a feature out of tolerance: {"2021-03-29": ["tmin", "t_night", "t_occ", "t_day"], "2021-03-30": ["t_morn", "tmin", "t_night", "t_occ", "t_day"], "2021-03-31": ["t_night", "t_occ", "t_day"], "2021-04-01": ["kwh", "t_night", "t_occ", "t_day"], "2021-04-02": ["t_night", "t_occ", "t_day"], "2021-04-03": ["t_morn", "tmin", "t_night", "t_occ", "t_day"], "2021-04-04": ["kwh", "t_morn", "tmin", "t_night", "t_occ", "t_day"], "2021-04-05": ["peak15", "t_morn", "tmin", "t_night", "t_occ", "t_day"], "2021-04-06": ["kwh", "peak15", "t_morn", "tmin", "t_night", "t_day"], "2021-04-07": ["tmin", "t_occ"], "2021-04-08": ["t_night", "t_occ", "t_day"], "2021-04-09": ["t_morn", "tmin", "t_night", "t_occ", "t_day"], "2021-04-10": ["t_occ"], "2021-04-11": ["t_morn", "tmin", "t_night", "t_occ", "t_day"], "2021-04-12": ["tmin", "t_night", "t_occ", "t_day"], "2021-04-13": ["t_occ"], "2021-04-15": ["kwh"], "2021-04-17": ["kwh"], "2021-04-18": ["kwh", "t_occ"], "2021-04-19": ["tmin", "t_occ"], "2021-04-20": ["kwh", "t_night"], "2021-04-21": ["kwh", "peak15"], "2021-04-22": ["kwh"], "2021-04-24": ["t_occ"], "2021-04-25": ["t_morn", "t_night", "t_occ"]}
+==================================== PASSES ====================================
+=========================== short test summary info ============================
+PASSED test_outputs.py::test_predictor_exists
+PASSED test_outputs.py::test_hidden_set_is_complete
+FAILED test_outputs.py::test_period[winter] - AssertionError: winter: share o...
+FAILED test_outputs.py::test_period[spring] - AssertionError: spring: share o...
+========================= 2 failed, 2 passed in 3.52s ==========================

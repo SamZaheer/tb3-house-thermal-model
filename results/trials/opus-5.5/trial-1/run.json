@@ -1,0 +1,45 @@
+{
+ "trial": 1,
+ "source_run": "opus-r1b-20261021_141514",
+ "agent": "claude-code",
+ "model": "claude-opus-5-5",
+ "reasoning_effort": "max",
+ "settings": "Harbor trial; Claude Code harness; packaged task instruction and agent environment; 2-hour agent timeout",
+ "time_limit_minutes": 120,
+ "started_utc": "2026-10-21T18:15:14Z",
+ "ended_utc": "2026-10-21T18:31:05Z",
+ "minutes": 15.8,
+ "num_turns": 31,
+ "tool_calls": {
+  "Bash": 29,
+  "Write": 1
+ },
+ "ended": "by itself, with a finished predict.py and a closing report (result subtype success, stop_reason end_turn)",
+ "packaged_verifier_reward": 0,
+ "winter": {
+  "passed": false,
+  "share_in_tolerance": 0.912,
+  "lowest_week_share": 0.904,
+  "days_over_2_misses": 0,
+  "week_energy_error": [
+   -0.019,
+   -0.001,
+   -0.021
+  ]
+ },
+ "spring": {
+  "passed": false,
+  "share_in_tolerance": 0.652,
+  "lowest_week_share": 0.464,
+  "days_over_2_misses": 14,
+  "week_energy_error": [
+   0.144,
+   -0.042,
+   0.13,
+   0.13
+  ]
+ },
+ "execution_framework": "Harbor",
+ "execution_environment": "temporary VM",
+ "record_source": "Imported VM trial results; original Harbor trial directories and agent transcripts are no longer available."
+}

@@ -1,0 +1,142 @@
+{
+  "verifiable": {
+    "outcome": "pass",
+    "explanation": "The verifier is a deterministic pytest suite (tests/test_outputs.py + housegrade.py) that runs the agent's predict.py on two hidden weather files and compares eight numeric daily features against a fixed, pre-baked truth CSV using fixed tolerances. No LLM-as-judge, no runtime network installs (all verifier deps baked into tests/Dockerfile), and the comparison logic is pure numpy/pandas arithmetic, so repeated runs on the same predict.py give identical results."
+  },
+  "solvable": {
+    "outcome": "pass",
+    "explanation": "A complete reference solution (solution/predict.py + solution/housemodel/{house,sim,weather}.py) is provided and solve.sh installs and sanity-checks it against the autumn data. The README documents that this exact model passes both hidden periods with large margins (0.995/0.982 of day-features in tolerance) and that 17 independent refits of the same model structure from only the autumn data also pass, supporting that the task is achievable by an expert in a bounded amount of time."
+  },
+  "difficult": {
+    "outcome": "pass",
+    "explanation": "The task requires building a physically correct RC-network thermal model with heat-pump capacity/COP curves, defrost cycling, infiltration, solar gains through windows and a seasonally-varying tree, occupant schedules, and a thermostat with setback/recovery logic, calibrated from one season of data and generalized to out-of-sample winter/spring conditions colder and sunnier than anything seen. This is graduate-level building-energy / system-identification work, well beyond an average undergraduate's reach in a few days."
+  },
+  "interesting": {
+    "outcome": "pass",
+    "explanation": "Calibrating a house thermal/HVAC model from smart-meter and thermostat data to forecast winter demand and peak load is a real task performed by building-energy engineers, utility demand-forecasting analysts, and energy auditors; the scenario (OKC heat-pump house, utility wanting a winter forecast) is realistic and professionally motivated, not a contrived puzzle."
+  },
+  "outcome_verified": {
+    "outcome": "pass",
+    "explanation": "Only the resulting predict.py's output CSV is graded against daily features and tolerances; the instruction does not mandate any particular algorithm, library usage beyond what's pre-installed, or step-by-step procedure. Any approach that produces a correct CSV passes."
+  },
+  "anti_cheat_robustness": {
+    "outcome": "pass",
+    "explanation": "Hidden weather/truth files live only in the verifier image, readable by root only; the three given autumn files are reset to pristine copies before each run; predict.py runs as unprivileged `nobody` with its own process group killed afterward; the output file is only accepted if it is a regular file owned by `nobody` (blocking symlink tricks to read root-only truth); OOM killer is biased toward the predictor. No answer leakage into the agent image or shortcuts are evident."
+  },
+  "task_security": {
+    "outcome": "pass",
+    "explanation": "Reviewed environment/Dockerfile, tests/Dockerfile, test.sh, solve.sh, predict.py (stub and solution), and the housemodel code. No credential access, no network exfiltration, no obfuscated code, no destructive operations, and no prompt injection; all actions are scoped to building and verifying the task."
+  },
+  "functional_verification": {
+    "outcome": "pass",
+    "explanation": "Verification executes the agent's predict.py as a subprocess and numerically compares its output's derived daily features (energy, peak demand, temperatures) against ground truth with tolerances \u2014 no string/keyword matching against source code anywhere in the test suite."
+  },
+  "deterministic_reproducible": {
+    "outcome": "pass",
+    "explanation": "All pip dependencies are version-pinned identically in environment/Dockerfile and tests/Dockerfile (numpy==2.0.2, scipy==1.13.1, pandas==2.3.3, plus pinned pytest/pytest-json-ctrf in the verifier image). The reference solution runs with a fixed seed and noise disabled, and the hidden truth CSVs are static precomputed files, so comparisons are exactly reproducible across runs."
+  },
+  "essential_difficulty": {
+    "outcome": "pass",
+    "explanation": "Difficulty comes from correctly modeling building thermal/HVAC physics and generalizing beyond observed conditions, not from output formatting: the required output is a simple 3-column CSV, tolerances are generous (10-30% relative with absolute floors) and the day-feature/week-share pass bars (92%/80%) allow for a reasonable the of imperfection, so failures should stem from physical mis-modeling rather than clerical precision."
+  },
+  "test_instruction_alignment": {
+    "outcome": "pass",
+    "explanation": "The instruction's requirements (input/output CLI contract, column schema, spin-up exclusion, 10-minute runtime limit, no network, daily energy/peak/comfort grading over winter and spring with near-complete weekly matching) are all exercised by test_outputs.py and housegrade.py, and no additional requirements beyond those are enforced on the agent (the extra `test_hidden_set_is_complete` check is a verifier self-integrity guard, not a requirement imposed on the submission)."
+  },
+  "novel": {
+    "outcome": "pass",
+    "explanation": "This is a bespoke combination of building thermal RC-network modeling, variable-speed heat-pump physics (capacity/COP curves, defrost, backup heat), solar/tree shading, occupant behavior, and system identification from a custom simulated dataset \u2014 not a textbook exercise or well-known problem with an off-the-shelf solution."
+  },
+  "agentic": {
+    "outcome": "pass",
+    "explanation": "Solving requires exploring the provided CSV/JSON data, iteratively building and testing a simulation model against the autumn data, and writing substantial multi-file code \u2014 this cannot be done via a single zero-shot generation and requires multi-step exploration, coding, and self-verification against the given autumn truth."
+  },
+  "reviewable": {
+    "outcome": "pass",
+    "explanation": "The README provides extensive calibration evidence (reference model margins, perturbed-parameter robustness, 17 independent refits passing, ablations of individual mechanisms failing, a stub and competing-model submissions failing) that lets a non-specialist reviewer trust the grading thresholds without needing to personally verify the building-physics details; ground truth is generated by running the documented simulation code, not hardcoded."
+  },
+  "instruction_concision": {
+    "outcome": "pass",
+    "explanation": "instruction.md is three short paragraphs, uses absolute paths (/app/data/, /app/predict.py), states the goal and I/O contract without prescribing an algorithm or step-by-step procedure, and contains no unnecessary headings, roleplay, or tool-listing beyond what's structurally needed (the CLI invocation and column schema)."
+  },
+  "solution_quality": {
+    "outcome": "pass",
+    "explanation": "solve.sh installs the reference predict.py and housemodel/ files (kept as separate files, not heredocs) and actually runs the model on the autumn weather, printing a computed comparison against the metered data \u2014 it demonstrates genuine computation rather than echoing a precomputed answer."
+  },
+  "separate_verifier_configured": {
+    "outcome": "pass",
+    "explanation": "environment_mode=separate; artifacts correctly captures the agent's whole /app (excluding the three given data files, which the verifier restores from its own tests/given copies); tests/Dockerfile bakes pytest/pytest-json-ctrf and copies all test code and hidden data via `COPY . /tests/`; test.sh performs no runtime installs; the shared given/ data files are byte-identical to environment/data/ (verified via diff)."
+  },
+  "environment_hygiene": {
+    "outcome": "pass",
+    "explanation": "The agent Dockerfile only installs numpy/scipy/pandas and copies data/ and predict.py \u2014 no tests/ or solution/ content, and no test-only deps (pytest, ctrf) leak into it. The verifier Dockerfile owns /tests, bakes its own tooling, and pre-creates /app and /logs/verifier. Neither Dockerfile uses apt, so apt pinning/cleanup rules are not applicable."
+  },
+  "structured_data_schema": {
+    "outcome": "pass",
+    "explanation": "The instruction explicitly specifies the output CLI contract and required columns (`time,power_kW,indoor_temp_C`), pointing to the example autumn files for exact column meaning, and house.json documents each field's precise definition (mean demand, reading at interval end, 0.1 C resolution) \u2014 this is a normative, not merely illustrative, schema."
+  },
+  "typos": {
+    "outcome": "pass",
+    "explanation": "No typos were found in file paths, commands, variable names, or identifiers across instruction.md, README.md, task.toml, the Dockerfiles, or the Python source; data file names and schema columns are consistent everywhere they are referenced."
+  },
+  "difficulty_explanation_quality": {
+    "outcome": "pass",
+    "explanation": "The README's Difficulty explanation concretely identifies why the task is hard (must extrapolate to conditions colder/sunnier than seen, physical mechanisms leave only faint traces in the autumn data, a purely statistical fit demonstrably fails to generalize), notes the data's provenance (simulated house/meter, real Open-Meteo weather) and realism, and names who would do this in the real world (a building-energy engineer or utility analyst) \u2014 covering both agent and human difficulty without reporting pass-rate scores."
+  },
+  "solution_explanation_quality": {
+    "outcome": "pass",
+    "explanation": "The Solution explanation clearly describes the model's structure (3-node RC network, infiltration, solar/tree shading, occupant schedule, thermostat with setbacks, variable-speed heat pump with defrost and backup heat) and the key insight that it's the reference-generating model, consistent with the actual solution/housemodel code reviewed above."
+  },
+  "verification_explanation_quality": {
+    "outcome": "pass",
+    "explanation": "The Verification explanation details the exact mechanism (subprocess execution as `nobody`, file-ownership checks, spin-up exclusion, eight daily features, relative/absolute tolerances, weekly/day-count pass bars) and justifies the tolerance calibration with concrete evidence: the reference's margins, ten perturbed-parameter copies passing, 17 independent refits passing, mechanism-ablated refits and a stub failing, and competing model submissions failing \u2014 satisfying the requirement to validate tolerance bounds against more than just the reference solution."
+  },
+  "category_and_tags": {
+    "outcome": "pass",
+    "explanation": "category=Science / subcategory=Physics is a reasonable fit for a building thermal-physics system-identification task; tags (building-energy, heat-pump, thermal-modelling, system-identification, model-calibration, time-series) are specific and descriptive of the actual skills and domain involved, not generic placeholders."
+  },
+  "task_name": {
+    "outcome": "pass",
+    "explanation": "The task's declared name, house-thermal-model (from task.toml's `terminal-bench/house-thermal-model`), is a concise, descriptive, kebab-case, 3-word slug that clearly conveys the task's subject matter."
+  },
+  "resource_configuration": {
+    "outcome": "pass",
+    "explanation": "Timeouts and resources were deliberately adjusted from defaults: agent timeout 7200s reflects genuine multi-step modeling/calibration work, verifier timeout 1800s comfortably covers two 600s-capped predictor runs plus overhead, and cpus=2/memory=4096MB/storage=10240MB/build_timeout=900s are modest and appropriate for numpy/pandas simulation over weeks of 5-minute data without numba \u2014 difficulty comes from reasoning, not from imposed computational scale."
+  },
+  "task_readme": {
+    "outcome": "pass",
+    "explanation": "README.md includes a task metadata summary plus the required Difficulty explanation, Solution explanation, Verification explanation, and Relevant experience sections, all populated with substantive, non-redundant content consistent with the other task files."
+  },
+  "expert_time_estimate": {
+    "outcome": "pass",
+    "explanation": "expert_time_estimate_hours = 6.0, non-zero and plausible for a domain expert who already knows the intended model structure implementing and lightly calibrating it against the given autumn data, consistent with the described difficulty and the 2-hour agent timeout (which allows more room than a best-case human expert would need)."
+  },
+  "task_toml_schema": {
+    "outcome": "pass",
+    "explanation": "task.toml uses only recognized sections and fields ([task], [metadata] with author_name/email/github/category/subcategory/tags/expert_time_estimate_hours, [verifier]/[verifier.env]/[verifier.environment], [agent], [environment]/[environment.env], [solution.env], plus root-level artifacts) \u2014 no invented fields like 'skills' or 'prerequisites' were found."
+  },
+  "no_extraneous_files": {
+    "outcome": "pass",
+    "explanation": "Every file in the tree is referenced by a Dockerfile, the instruction, solve.sh, or the test harness (data files, model code, hidden weather/truth, Dockerfiles, task.toml, README) \u2014 no editor cruft, backups, or unused assets were found."
+  },
+  "artifact_efficiency": {
+    "outcome": "pass",
+    "explanation": "The artifact captures the agent's /app directory minus the three given data files (restored from a baked verifier copy), which is exactly the agent's deliverable (predict.py and any supporting code it writes) \u2014 small and not duplicating build-time-fixed content."
+  },
+  "verifier_execution_isolation": {
+    "outcome": "pass",
+    "explanation": "The agent's predict.py is executed as a subprocess under `nobody` (uid/gid drop, no new groups, OOM-score bias) while the pytest process itself (which only imports the verifier's own housegrade.py, never agent code) runs as root; the reward directory is chmod 700 before any agent code runs, root derives the reward from the subprocess outcome, and output/stderr are captured to files/temp files rather than pipes with the process group killed afterward."
+  },
+  "ctrf_reporting": {
+    "outcome": "pass",
+    "explanation": "test.sh invokes `python3 -m pytest --ctrf /logs/verifier/ctrf.json ...` directly, and since the pytest process runs as root (dropping privileges only for the predict.py subprocess), CTRF output lands at the expected collected path with no workaround needed."
+  },
+  "do_not_modify_enforced": {
+    "outcome": "not_applicable",
+    "explanation": "instruction.md contains no 'do not modify/delete/preserve' language about a concrete artifact; the restoration of the three given data files before grading is an anti-cheat measure rather than an instruction-stated preservation constraint, so this criterion does not apply."
+  },
+  "binary_reward": {
+    "outcome": "pass",
+    "explanation": "test.sh only ever writes exactly `0` or `1` to /logs/verifier/reward.txt, determined solely by the pytest exit code; no continuous score, ratio, or weighted composite is ever written to the reward channel."
+  }
+}

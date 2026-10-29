@@ -1,0 +1,23 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.1.1, pluggy-1.7.0
+rootdir: /tests
+plugins: json-ctrf-0.5.2
+collected 4 items
+
+test_outputs.py ....                                                     [100%]
+
+==================================== PASSES ====================================
+_____________________________ test_period[winter] ______________________________
+----------------------------- Captured stdout call -----------------------------
+winter: {"passed": true, "share": 0.9953703703703703, "min_week": 0.9821428571428571, "bad_days": 0, "max_day_miss": 1, "graded_days": 27, "week_share": [1.0, 0.982, 1.0], "week_kwh_err": [-0.013, -0.003, -0.012], "week_peak_err": [-0.024, -0.075, -0.038], "feat_share": {"kwh": 1.0, "peak15": 0.963, "hi_h": 1.0, "t_morn": 1.0, "tmin": 1.0, "t_night": 1.0, "t_occ": 1.0, "t_day": 1.0}}
+winter: days with a feature out of tolerance: {"2021-02-01": ["peak15"]}
+_____________________________ test_period[spring] ______________________________
+----------------------------- Captured stdout call -----------------------------
+spring: {"passed": true, "share": 0.9821428571428571, "min_week": 0.9642857142857143, "bad_days": 0, "max_day_miss": 1, "graded_days": 28, "week_share": [0.964, 0.982, 1.0, 0.982], "week_kwh_err": [0.014, -0.068, 0.038, 0.001], "week_peak_err": [0.064, -0.027, 0.019, -0.026], "feat_share": {"kwh": 0.857, "peak15": 1.0, "hi_h": 1.0, "t_morn": 1.0, "tmin": 1.0, "t_night": 1.0, "t_occ": 1.0, "t_day": 1.0}}
+spring: days with a feature out of tolerance: {"2021-03-29": ["kwh"], "2021-04-03": ["kwh"], "2021-04-06": ["kwh"], "2021-04-25": ["kwh"]}
+=========================== short test summary info ============================
+PASSED test_outputs.py::test_predictor_exists
+PASSED test_outputs.py::test_hidden_set_is_complete
+PASSED test_outputs.py::test_period[winter]
+PASSED test_outputs.py::test_period[spring]
+============================== 4 passed in 1.74s ===============================

@@ -1,0 +1,12 @@
+{
+ "location": "Oklahoma City, Oklahoma, USA",
+ "latitude": 35.47,
+ "longitude": -97.52,
+ "elevation_m": 367,
+ "time_zone": "all timestamps are local standard time (UTC-6), no daylight saving; each row is the 5-minute interval starting at its timestamp",
+ "house": "single-storey ranch on a concrete slab, built 1985, 165 m2 conditioned floor area",
+ "energy": "all-electric; a heat pump does the heating and cooling",
+ "meter": "power_kW = mean whole-house electric demand over the 5-minute interval",
+ "thermostat": "indoor_temp_C = the thermostat's temperature reading at the end of the interval (0.1 C resolution)",
+ "weather_source": "Open-Meteo historical weather archive (ERA5-based), hourly values interpolated to 5 minutes; CC BY 4.0"
+}

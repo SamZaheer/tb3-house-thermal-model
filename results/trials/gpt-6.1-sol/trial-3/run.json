@@ -1,0 +1,54 @@
+{
+ "trial": 3,
+ "source_run": "sol-s3-20261028_202327",
+ "agent": "claude-code",
+ "model": "gpt-6.1-sol",
+ "reasoning_effort": "xhigh",
+ "settings": "Harbor trial; Claude Code harness; packaged task instruction and agent environment; 2-hour agent timeout; web search tool not used",
+ "time_limit_minutes": 120,
+ "started_utc": "2026-10-29T00:23:27Z",
+ "ended_utc": "2026-10-29T02:05:35Z",
+ "minutes": 102,
+ "items": {
+  "agent_message": 16,
+  "command_execution": 105,
+  "file_change": 13
+ },
+ "web_searches": 0,
+ "usage": {
+  "input_tokens": 24554656,
+  "cached_input_tokens": 23581696,
+  "cache_write_input_tokens": 0,
+  "output_tokens": 204765,
+  "reasoning_output_tokens": 152147
+ },
+ "ended": "by itself, with a finished predict.py and a closing report",
+ "packaged_verifier_reward": 0,
+ "winter": {
+  "passed": true,
+  "share_in_tolerance": 0.968,
+  "lowest_week_share": 0.929,
+  "days_over_2_misses": 0,
+  "week_energy_error": [
+   -0.011,
+   0.006,
+   -0.038
+  ]
+ },
+ "spring": {
+  "passed": false,
+  "share_in_tolerance": 0.705,
+  "lowest_week_share": 0.518,
+  "days_over_2_misses": 12,
+  "week_energy_error": [
+   0.079,
+   -0.078,
+   0.05,
+   0.056
+  ]
+ },
+ "execution_environment": "temporary VM",
+ "agent_exit_code": 0,
+ "execution_framework": "Harbor",
+ "record_source": "Imported VM trial results; original Harbor trial directories and agent transcripts are no longer available."
+}

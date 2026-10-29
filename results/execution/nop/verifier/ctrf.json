@@ -1,0 +1,77 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-10-27T20:53:29.789421+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "9.1.1"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 2,
+            "failed": 2,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1793134408780,
+            "stop": 1793134409787
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_outputs.py::test_predictor_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1793134409075,
+                "stop": 1793134409076,
+                "retries": 0,
+                "file_path": "test_outputs.py"
+            },
+            {
+                "name": "test_outputs.py::test_hidden_set_is_complete",
+                "status": "passed",
+                "duration": 16,
+                "start": 1793134409076,
+                "stop": 1793134409092,
+                "retries": 0,
+                "file_path": "test_outputs.py"
+            },
+            {
+                "name": "test_outputs.py::test_period",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 370,
+                "start": 1793134409092,
+                "stop": 1793134409462,
+                "retries": 0,
+                "file_path": "test_outputs.py",
+                "tags": [
+                    "parametrize::period::['winter', 'spring']"
+                ],
+                "trace": "period = 'winter'\n\n    @pytest.mark.parametrize(\"period\", PERIODS)\n    def test_period(period):\n        \"\"\"The forecast must pass the period's daily-feature rule (see housegrade.py).\"\"\"\n        assert os.path.isfile(PREDICTOR), \"missing /app/predict.py\"\n        out = run_predictor(period)\n        truth = housegrade.read_truth(os.path.join(HIDDEN, f\"truth_{period}.csv\"))\n        try:\n            pred = housegrade.read_prediction(out, truth.index, period)\n        except Exception as exc:  # unreadable or incomplete output fails the period\n            pytest.fail(f\"{period}: output is not usable ({exc})\")\n        r = housegrade.grade(truth, pred, period)\n        summary = {k: r[k] for k in (\"passed\", \"share\", \"min_week\", \"bad_days\", \"max_day_miss\", \"graded_days\",\n                                     \"week_share\", \"week_kwh_err\", \"week_peak_err\", \"feat_share\")}\n        print(f\"{period}: {json.dumps(summary)}\")\n        print(f\"{period}: days with a feature out of tolerance: {json.dumps(r['failed_days'])}\")\n>       assert r[\"passed\"], (\n            f\"{period}: share of day-features in tolerance {r['share']:.3f} (needs {housegrade.BAR_ALL:.2f}), \"\n            f\"lowest week {r['min_week']:.3f} (needs {housegrade.BAR_WEEK:.2f}), days with more than \"\n            f\"{housegrade.DAY_MAX_MISS} misses {r['bad_days']} (needs 0), weekly energy error {r['week_kwh_err']} \"\n            f\"(within {housegrade.WEEK_KWH_TOL:.2f}), weekly peak error {r['week_peak_err']} (within {housegrade.WEEK_PEAK_TOL:.2f})\"\n        )\nE       AssertionError: winter: share of day-features in tolerance 0.255 (needs 0.92), lowest week 0.240 (needs 0.80), days with more than 2 misses 27 (needs 0), weekly energy error [-0.348, -0.259, -0.451] (within 0.12), weekly peak error [-0.886, -0.848, -0.89] (within 0.30)\nE       assert False\n\ntest_outputs.py:187: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            },
+            {
+                "name": "test_outputs.py::test_period",
+                "status": "failed",
+                "raw_status": "call_failed",
+                "duration": 325,
+                "start": 1793134409462,
+                "stop": 1793134409787,
+                "retries": 0,
+                "file_path": "test_outputs.py",
+                "tags": [
+                    "parametrize::period::['winter', 'spring']"
+                ],
+                "trace": "period = 'spring'\n\n    @pytest.mark.parametrize(\"period\", PERIODS)\n    def test_period(period):\n        \"\"\"The forecast must pass the period's daily-feature rule (see housegrade.py).\"\"\"\n        assert os.path.isfile(PREDICTOR), \"missing /app/predict.py\"\n        out = run_predictor(period)\n        truth = housegrade.read_truth(os.path.join(HIDDEN, f\"truth_{period}.csv\"))\n        try:\n            pred = housegrade.read_prediction(out, truth.index, period)\n        except Exception as exc:  # unreadable or incomplete output fails the period\n            pytest.fail(f\"{period}: output is not usable ({exc})\")\n        r = housegrade.grade(truth, pred, period)\n        summary = {k: r[k] for k in (\"passed\", \"share\", \"min_week\", \"bad_days\", \"max_day_miss\", \"graded_days\",\n                                     \"week_share\", \"week_kwh_err\", \"week_peak_err\", \"feat_share\")}\n        print(f\"{period}: {json.dumps(summary)}\")\n        print(f\"{period}: days with a feature out of tolerance: {json.dumps(r['failed_days'])}\")\n>       assert r[\"passed\"], (\n            f\"{period}: share of day-features in tolerance {r['share']:.3f} (needs {housegrade.BAR_ALL:.2f}), \"\n            f\"lowest week {r['min_week']:.3f} (needs {housegrade.BAR_WEEK:.2f}), days with more than \"\n            f\"{housegrade.DAY_MAX_MISS} misses {r['bad_days']} (needs 0), weekly energy error {r['week_kwh_err']} \"\n            f\"(within {housegrade.WEEK_KWH_TOL:.2f}), weekly peak error {r['week_peak_err']} (within {housegrade.WEEK_PEAK_TOL:.2f})\"\n        )\nE       AssertionError: spring: share of day-features in tolerance 0.290 (needs 0.92), lowest week 0.214 (needs 0.80), days with more than 2 misses 28 (needs 0), weekly energy error [0.701, 0.681, 0.264, 0.236] (within 0.12), weekly peak error [-0.639, -0.714, -0.733, -0.687] (within 0.30)\nE       assert False\n\ntest_outputs.py:187: AssertionError",
+                "message": "The test failed in the call phase due to an assertion error"
+            }
+        ]
+    }
+}

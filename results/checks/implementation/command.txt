@@ -1,0 +1,1 @@
+harbor check tasks/house-thermal-model --rubric docs/prompts/task-implementation.toml --agent claude-code --model anthropic/claude-sonnet-5 --ae CLAUDE_FORCE_OAUTH=1 --ae CLAUDE_CODE_OAUTH_TOKEN=<token> -c configs/check-job.json

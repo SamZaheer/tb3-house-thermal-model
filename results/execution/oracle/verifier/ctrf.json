@@ -1,0 +1,71 @@
+{
+    "reportFormat": "CTRF",
+    "specVersion": "0.0.0",
+    "timestamp": "2026-10-27T20:52:54.665937+00:00",
+    "generatedBy": "pytest",
+    "results": {
+        "tool": {
+            "name": "pytest",
+            "version": "9.1.1"
+        },
+        "summary": {
+            "tests": 4,
+            "passed": 4,
+            "failed": 0,
+            "skipped": 0,
+            "pending": 0,
+            "other": 0,
+            "start": 1793134372921,
+            "stop": 1793134374664
+        },
+        "environment": {
+            "buildName": "Pytest JSON CTRF Report",
+            "buildNumber": "000",
+            "buildUrl": "https://ctrf.io"
+        },
+        "tests": [
+            {
+                "name": "test_outputs.py::test_predictor_exists",
+                "status": "passed",
+                "duration": 1,
+                "start": 1793134373242,
+                "stop": 1793134373243,
+                "retries": 0,
+                "file_path": "test_outputs.py"
+            },
+            {
+                "name": "test_outputs.py::test_hidden_set_is_complete",
+                "status": "passed",
+                "duration": 14,
+                "start": 1793134373243,
+                "stop": 1793134373257,
+                "retries": 0,
+                "file_path": "test_outputs.py"
+            },
+            {
+                "name": "test_outputs.py::test_period",
+                "status": "passed",
+                "duration": 708,
+                "start": 1793134373257,
+                "stop": 1793134373965,
+                "retries": 0,
+                "file_path": "test_outputs.py",
+                "tags": [
+                    "parametrize::period::['winter', 'spring']"
+                ]
+            },
+            {
+                "name": "test_outputs.py::test_period",
+                "status": "passed",
+                "duration": 698,
+                "start": 1793134373965,
+                "stop": 1793134374663,
+                "retries": 0,
+                "file_path": "test_outputs.py",
+                "tags": [
+                    "parametrize::period::['winter', 'spring']"
+                ]
+            }
+        ]
+    }
+}

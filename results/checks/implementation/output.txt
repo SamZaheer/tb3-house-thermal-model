@@ -1,0 +1,17 @@
+
+🔎 Checking task quality...
+  1/1 Mean: 0.000 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 0:06:23 0:00:00❌ house-thermal-model: Check agent did not produce a valid result.
+Verifier output:
+missing result file: check-result.json
+Trial artifacts: 
+/Users/dev/tb3-work/harbor-jobs/rubric/tb3-house-thermal-model/2026-10-27__16-59
+-21/check-house-thermal-model__mmouA9B
+Try again or use a more capable model (-m sonnet or -m opus).
+
+Report: 
+/Users/dev/tb3-work/harbor-jobs/rubric/tb3-house-thermal-model/2026-10-27__16-59
+-21/check_report.json
+Inspect results by running `harbor view 
+/Users/dev/tb3-work/harbor-jobs/rubric/tb3-house-thermal-model`
+In the viewer, open a trial's Artifacts tab to read its check-result.json, and 
+use ← / → to switch between tasks.
